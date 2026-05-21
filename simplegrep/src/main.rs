@@ -1,6 +1,7 @@
-use std::{error::Error, process};
+use std::{env, error::Error, process};
 
 mod config;
+mod custom_err;
 mod file;
 mod grep;
 
@@ -16,7 +17,8 @@ fn main() {
 }
 
 fn run() -> Result<(), Box<dyn Error>> {
-    let config = GrepConfig::build()?;
+    let args = env::args().collect();
+    let config = GrepConfig::build(args)?;
     let content = read_file(&config.filepath)?;
     let grepped_lines = grep(config.searchstring, &content);
 
